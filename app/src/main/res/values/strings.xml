@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Places near me</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="places_api_url">https://maps.googleapis.com/</string>
+
+    <!-- Place names -->>
+    <string name="atm">ATM</string>
+    <string name="bank">Ngân hàng</string>
+    <string name="bus">Xe bus</string>
+    <string name="coffee">Cafe</string>
+    <string name="resraurant">Ăn uống</string>
+    <string name="hospital">Bệnh viện</string>
+</resources>
