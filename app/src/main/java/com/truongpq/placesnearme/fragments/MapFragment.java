@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
-import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -29,6 +28,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -53,14 +54,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener {
+public class MapFragment extends Fragment implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
+
+    private final String LOG_TAG ="MapFragment";
 
     private PlacesApiHelper helper;
 
-
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
+    private LocationRequest mLocationRequest;
     private LatLng mLastLatLng;
 
     FloatingActionMenu fabMenuSearch;
@@ -73,7 +75,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
     private PlacesAdapter adapter;
 
     public MapFragment() {
-        // Required empty public constructor
     }
 
     public static MapFragment newInstance() {
@@ -84,6 +85,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
     }
 
     @Nullable
@@ -97,12 +104,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
 
         return view;
     }
@@ -190,31 +191,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(10); // Update location every second
 
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
 
-        //Move to current location
-        mLastLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+    private void moveToLocation(LatLng latLng) {
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(mLastLatLng).zoom(12).build();
+                .target(latLng).zoom(12).build();
         mMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(cameraPosition));
-        drawCircle(mLastLocation);
+        drawCircle(latLng);
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.i(LOG_TAG, "GoogleApiClient connection has been suspend");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Log.i(LOG_TAG, "GoogleApiClient connection has failed");
     }
 
-    private void drawCircle(Location location) {
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+    private void drawCircle(LatLng latLng) {
         Circle circle = mMap.addCircle(new CircleOptions()
                 .center(latLng)
                 .radius(2000)
@@ -246,7 +248,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
         @Override
         public void onResponse(Call<PlacesRespose> call, Response<PlacesRespose> response) {
             List<Place> places = response.body().getResults();
-
+            mMap.clear();
             adapter = new PlacesAdapter(places);
             rvPlaces.setAdapter(adapter);
 
@@ -264,6 +266,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
             t.printStackTrace();
         }
     };
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLastLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        moveToLocation(mLastLatLng);
+    }
 }
 
 

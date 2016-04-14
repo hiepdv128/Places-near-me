@@ -22,7 +22,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
 
     public PlacesAdapter(List<Place> places) {
         this.places = places;
-        Log.d("Constructor", "Constructor");
     }
 
     @Override
