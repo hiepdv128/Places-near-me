@@ -6,8 +6,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.truongpq.placesnearme.R;
 import com.truongpq.placesnearme.models.Place;
 
@@ -19,6 +21,7 @@ import java.util.List;
 public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder>{
 
     private List<Place> places;
+    private Context context;
 
     public PlacesAdapter(List<Place> places) {
         this.places = places;
@@ -26,7 +29,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
@@ -45,7 +48,8 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
         tvName.setText(place.getName());
         TextView tvVicinity = holder.tvVicinity;
         tvVicinity.setText(place.getVicinity());
-
+        ImageView imgPlace = holder.imgPlace;
+        Picasso.with(context).load(place.getIcon()).into(imgPlace);
     }
 
     @Override
@@ -56,12 +60,14 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tvName;
         public TextView tvVicinity;
+        public ImageView imgPlace;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             tvName = (TextView) itemView.findViewById(R.id.tv_name);
             tvVicinity = (TextView) itemView.findViewById(R.id.tv_vicinity);
+            imgPlace = (ImageView) itemView.findViewById(R.id.img_place);
         }
     }
 }

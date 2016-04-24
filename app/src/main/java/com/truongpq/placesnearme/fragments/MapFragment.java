@@ -7,11 +7,12 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -36,13 +38,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.truongpq.placesnearme.R;
 import com.truongpq.placesnearme.adapters.PlacesAdapter;
+import com.truongpq.placesnearme.models.ItemClickSupport;
 import com.truongpq.placesnearme.models.Place;
 import com.truongpq.placesnearme.models.PlaceTypes;
 import com.truongpq.placesnearme.models.PlacesRespose;
@@ -56,7 +56,7 @@ import retrofit2.Response;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
-    private final String LOG_TAG ="MapFragment";
+    private final String LOG_TAG = "MapFragment";
 
     private PlacesApiHelper helper;
 
@@ -65,14 +65,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
     private LocationRequest mLocationRequest;
     private LatLng mLastLatLng;
 
-    FloatingActionMenu fabMenuSearch;
+    private FloatingActionMenu fabMenuSearch;
     private FloatingActionButton fabATM;
     private FloatingActionButton fabBank;
 
-    private SlidingUpPanelLayout slidingLayout;
-
     private RecyclerView rvPlaces;
     private PlacesAdapter adapter;
+
+    private BottomSheetBehavior bottomSheetBehavior;
 
     public MapFragment() {
     }
@@ -112,7 +112,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        slidingLayout = (SlidingUpPanelLayout) getActivity().findViewById(R.id.sliding_layout);
+        View bottomSheet = getActivity().findViewById(R.id.bottom_sheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
 
         rvPlaces = (RecyclerView) getActivity().findViewById(R.id.rv_places);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -129,6 +141,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
         fabATM.setOnClickListener(clickListener);
         fabBank.setOnClickListener(clickListener);
     }
+
 
     public void onStart() {
         mGoogleApiClient.connect();
@@ -203,7 +216,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
                 .target(latLng).zoom(12).build();
         mMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(cameraPosition));
-        drawCircle(latLng);
     }
 
     @Override
@@ -216,15 +228,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
         Log.i(LOG_TAG, "GoogleApiClient connection has failed");
     }
 
-    private void drawCircle(LatLng latLng) {
-        Circle circle = mMap.addCircle(new CircleOptions()
-                .center(latLng)
-                .radius(2000)
-                .fillColor(Color.argb(20, 50, 0, 255))
-                .strokeColor(Color.argb(20, 50, 0, 255))
-                .strokeWidth(2));
-    }
-
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -233,11 +236,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
                     fabMenuSearch.close(true);
                     createCustomAnimation();
                     helper.requestPlaces(PlaceTypes.atm, mLastLatLng, 5000, placesCallback);
-                    break;
-                case R.id.fab_bank:
-                    fabMenuSearch.close(true);
-                    createCustomAnimation();
-                    helper.requestPlaces(PlaceTypes.bank, mLastLatLng, 5000, placesCallback);
+                    bottomSheetBehavior.setPeekHeight(100);
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                     break;
             }
         }
@@ -247,16 +247,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
 
         @Override
         public void onResponse(Call<PlacesRespose> call, Response<PlacesRespose> response) {
-            List<Place> places = response.body().getResults();
+            final List<Place> places = response.body().getResults();
             mMap.clear();
             adapter = new PlacesAdapter(places);
             rvPlaces.setAdapter(adapter);
+            ItemClickSupport.addTo(rvPlaces).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                @Override
+                public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                    mMap.clear();
+                    com.truongpq.placesnearme.models.Location location = places.get(position).getGeometry().getLocation();
+                    LatLng latLng = new LatLng(location.getLat(), location.getLng());
+                    mMap.addMarker(new MarkerOptions().position(latLng).title(places.get(position).getName()).snippet(places.get(position).getVicinity()));
+                    moveToLocation(latLng);
+                    bottomSheetBehavior.setPeekHeight(100);
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            });
 
-            for (Place r : places) {
-                com.truongpq.placesnearme.models.Location location = r.getGeometry().getLocation();
+            for (Place place : places) {
+                com.truongpq.placesnearme.models.Location location = place.getGeometry().getLocation();
                 LatLng latLng = new LatLng(location.getLat(), location.getLng());
-                String name = r.getName();
-                mMap.addMarker(new MarkerOptions().position(latLng).title(name));
+                mMap.addMarker(new MarkerOptions().position(latLng).title(place.getName()).snippet(place.getVicinity()));
             }
 
         }
@@ -270,7 +281,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Connect
     @Override
     public void onLocationChanged(Location location) {
         mLastLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        moveToLocation(mLastLatLng);
+    }
+
+    public void onBackPressed() {
+        mMap.clear();
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 }
 

@@ -11,9 +11,6 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by TruongPQ on 4/9/16.
- */
 public class PlacesApiHelper {
     private Context context;
 

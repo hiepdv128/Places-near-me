@@ -9,8 +9,10 @@ import com.truongpq.placesnearme.R;
 import com.truongpq.placesnearme.fragments.MapFragment;
 import com.truongpq.placesnearme.fragments.FavoriteFragment;
 
+import java.util.List;
+
 public class FragmentAdapter extends FragmentPagerAdapter implements IconTabProvider {
-    final int PAGE_COUNT = 2;
+    public static final int PAGE_COUNT = 2;
 
     public FragmentAdapter(FragmentManager fm) {
         super(fm);
@@ -21,7 +23,7 @@ public class FragmentAdapter extends FragmentPagerAdapter implements IconTabProv
         switch (position) {
             case 0: return MapFragment.newInstance();
             case 1: return FavoriteFragment.newInstance();
-            default: return MapFragment.newInstance();
+            default: return null;
         }
 
     }
