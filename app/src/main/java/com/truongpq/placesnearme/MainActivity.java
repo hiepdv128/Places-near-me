@@ -8,14 +8,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -41,13 +44,14 @@ import com.truongpq.placesnearme.models.PlaceType;
 import com.truongpq.placesnearme.models.PlacesRespose;
 import com.truongpq.placesnearme.networks.PlacesApiHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, LocationListener, View.OnClickListener, Callback<PlacesRespose>, ItemClickSupport.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, LocationListener, View.OnClickListener, Callback<PlacesRespose>, ItemClickSupport.OnItemClickListener {
 
     private final String LOG_TAG = "MainActivity";
 
@@ -59,7 +63,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng mLastLatLng;
 
     private ImageButton btnMyLocation;
-    private AutoCompleteTextView autoCompleteTextView;
+    private EditText edtSearch;
     private BottomSheetBehavior bottomSheetType;
     private BottomSheetBehavior bottomSheetPlace;
 
@@ -75,6 +79,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -103,8 +109,34 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         View btsPlace = findViewById(R.id.bottom_sheet_place);
         bottomSheetPlace = BottomSheetBehavior.from(btsPlace);
 
-        autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autocomplete);
-        autoCompleteTextView.setOnClickListener(this);
+        edtSearch = (EditText) findViewById(R.id.edit_search);
+        edtSearch.setOnClickListener(this);
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                s = s.toString().toLowerCase();
+                final List<PlaceType> filteredList = new ArrayList<>();
+                for (PlaceType t : placeTypes) {
+                    String name = t.getName().toLowerCase();
+                    if (name.contains(s)) {
+                        filteredList.add(t);
+                    }
+                }
+                placeTypesAdapter = new PlaceTypesAdapter(filteredList);
+                rvTypes.setAdapter(placeTypesAdapter);
+                placeTypesAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private void initPlaceTypes() {
@@ -122,6 +154,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void initPlaces() {
         rvPlaces = (RecyclerView) findViewById(R.id.rv_places);
+        rvPlaces.setHasFixedSize(true);
         rvPlaces.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -138,7 +171,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             case R.id.btn_my_location:
                 moveToLocation(mLastLatLng);
                 break;
-            case R.id.autocomplete:
+            case R.id.edit_search:
                 bottomSheetType.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
     }
@@ -151,18 +184,22 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onBackPressed() {
+//        if (bottomSheetType.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+//            bottomSheetType.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//            return;
+//        }
+//
+//        if (bottomSheetPlace.getState() == BottomSheetBehavior.STATE_EXPANDED || bottomSheetPlace.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+//            mMap.clear();
+//            bottomSheetPlace.setPeekHeight(0);
+//            bottomSheetPlace.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//            return;
+//        }
+
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             return;
         }
-
-        if (bottomSheetType.getState() == BottomSheetBehavior.STATE_EXPANDED) bottomSheetType.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        if (bottomSheetPlace.getState() == BottomSheetBehavior.STATE_EXPANDED || bottomSheetPlace.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-            mMap.clear();
-            bottomSheetPlace.setPeekHeight(0);
-            bottomSheetPlace.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        }
-
 
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
@@ -174,7 +211,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 doubleBackToExitPressedOnce = false;
             }
         }, 2000);
-
     }
 
     @Override
