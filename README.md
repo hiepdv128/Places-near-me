@@ -2,7 +2,7 @@
 
 Video demo
 
-![video](https://www.youtube.com/watch?v=CHViUba8Y20)
+https://www.youtube.com/watch?v=CHViUba8Y20
 
 Screen shot
 
