@@ -1,8 +1,6 @@
 # Places-near-me
 
-Video demo
-
-https://www.youtube.com/watch?v=CHViUba8Y20
+Video demo: https://www.youtube.com/watch?v=CHViUba8Y20
 
 Screen shot
 
