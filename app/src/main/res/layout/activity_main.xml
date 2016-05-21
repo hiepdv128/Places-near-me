@@ -10,67 +10,78 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
+        <fragment
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            map:uiCompass="true" />
+            android:layout_height="match_parent" />
 
-        <include layout="@layout/action_bar" />
-
-        <ImageButton
-            android:id="@+id/btn_my_location"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_my_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="64dp"
             android:layout_marginRight="8dp"
-            android:background="@drawable/circle"
-            android:src="@drawable/ic_my_location" />
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_my_location"
+            app:backgroundTint="#FFFFFF" />
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_types"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="128dp"
+            android:layout_marginRight="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_list"
+            app:backgroundTint="#FFFFFF" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_direction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="128dp"
+            android:layout_marginRight="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_directions"
+            android:visibility="gone"
+            app:backgroundTint="#FFFFFF" />
+
+        <!--<ImageButton-->
+            <!--android:id="@+id/btn_list"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="bottom|right"-->
+            <!--android:layout_marginBottom="128dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:background="@drawable/circle"-->
+            <!--android:src="@drawable/ic_list" />-->
+
+        <!--<ImageButton-->
+            <!--android:id="@+id/btn_direction"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="bottom|right"-->
+            <!--android:layout_marginBottom="128dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:background="@drawable/circle"-->
+            <!--android:src="@drawable/ic_directions"-->
+            <!--android:visibility="gone" />-->
     </FrameLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/bottom_sheet_type"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@android:color/white"
-        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+    <include layout="@layout/bottom_sheet_directions" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_types"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+    <include layout="@layout/bottom_sheet_places" />
 
-    </android.support.v4.widget.NestedScrollView>
-
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/bottom_sheet_place"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:background="@android:color/white"
-        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Danh sách địa điểm"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_places"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
+    <include layout="@layout/bottom_sheet_types" />
 
 </android.support.design.widget.CoordinatorLayout>

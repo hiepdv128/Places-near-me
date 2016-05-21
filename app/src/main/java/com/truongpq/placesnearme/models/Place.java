@@ -1,8 +1,5 @@
 package com.truongpq.placesnearme.models;
 
-/**
- * Created by TruongPQ on 4/9/16.
- */
 public class Place {
     private Geometry geometry;
     private String icon;

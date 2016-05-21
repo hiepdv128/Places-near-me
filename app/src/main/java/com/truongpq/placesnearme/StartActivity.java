@@ -7,12 +7,13 @@ import android.os.Bundle;
 
 public class StartActivity extends AppCompatActivity {
 
-    private static int SPLASH_TIME_OUT = 2000;
+    private static int SPLASH_TIME_OUT = 1500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        getSupportActionBar().hide();
 
         new Handler().postDelayed(new Runnable() {
 

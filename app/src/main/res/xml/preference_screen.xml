@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:dialogTitle="Chọn bán kính"
+        android:entries="@array/entries"
+        android:entryValues="@array/entrieValues"
+        android:key="list_radius"
+        android:title="Bán kính" />
+</PreferenceScreen>
