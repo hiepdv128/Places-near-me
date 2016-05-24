@@ -21,7 +21,7 @@
             android:id="@+id/edit_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Thử bệnh viện, nhà hàng,..."
+            android:hint="Try university, bank,..."
             android:textSize="18sp"
             android:textStyle="italic" />
     </android.support.design.widget.TextInputLayout>
@@ -30,6 +30,6 @@
         android:id="@+id/rv_types"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="8dp"></android.support.v7.widget.RecyclerView>
+        android:elevation="8dp"/>
 
 </LinearLayout>

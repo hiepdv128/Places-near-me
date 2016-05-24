@@ -1,9 +1,11 @@
 package com.truongpq.placesnearme;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -14,6 +16,14 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         getSupportActionBar().hide();
+
+        Typeface logoTypeface = Typeface.createFromAsset(getAssets(), "Grandesign.ttf");
+        TextView tvLogo = (TextView) findViewById(R.id.tv_logo);
+        tvLogo.setTypeface(logoTypeface);
+
+        Typeface sloganTypeface = Typeface.createFromAsset(getAssets(), "Champagne.ttf");
+        TextView tvSlogan = (TextView) findViewById(R.id.tv_slogan);
+        tvSlogan.setTypeface(sloganTypeface);
 
         new Handler().postDelayed(new Runnable() {
 

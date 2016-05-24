@@ -3,17 +3,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@drawable/wallpaper"
     tools:context="com.truongpq.placesnearme.StartActivity">
 
-    <TextView
-        android:id="@+id/tv"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PLACES NEAR ME"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
         android:layout_gravity="center"
-        android:textSize="32sp"/>
+        android:orientation="vertical">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_logo" />
+
+        <TextView
+            android:id="@+id/tv_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PLACES NEAR ME"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_slogan"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DrTeam - For An Inspiring Social"
+        android:textColor="#FFFFFF" />
 </FrameLayout>
