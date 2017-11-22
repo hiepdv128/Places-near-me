@@ -1,4 +1,4 @@
-package com.truongpq.placesnearme.adapters;
+package com.placesnearme.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.directions.route.Segment;
-import com.truongpq.placesnearme.R;
+import com.placesnearme.R;
 
 import java.util.List;
 

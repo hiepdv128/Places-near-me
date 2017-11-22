@@ -1,4 +1,4 @@
-package com.truongpq.placesnearme;
+package com.placesnearme;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -1,4 +1,4 @@
-package com.truongpq.placesnearme.models;
+package com.placesnearme.models;
 
 public class Place {
     private Geometry geometry;

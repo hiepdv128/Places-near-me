@@ -1,4 +1,4 @@
-package com.truongpq.placesnearme.models;
+package com.placesnearme.models;
 
 import java.util.List;
 

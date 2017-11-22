@@ -1,4 +1,4 @@
-package com.truongpq.placesnearme.adapters;
+package com.placesnearme.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +10,8 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.truongpq.placesnearme.R;
-import com.truongpq.placesnearme.models.PlaceType;
+import com.placesnearme.R;
+import com.placesnearme.models.PlaceType;
 
 import java.util.ArrayList;
 import java.util.List;

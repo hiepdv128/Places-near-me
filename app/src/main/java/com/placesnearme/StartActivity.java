@@ -1,4 +1,4 @@
-package com.truongpq.placesnearme;
+package com.placesnearme;
 
 import android.content.Intent;
 import android.graphics.Typeface;

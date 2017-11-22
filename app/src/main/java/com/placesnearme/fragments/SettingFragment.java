@@ -1,12 +1,11 @@
-package com.truongpq.placesnearme.fragments;
+package com.placesnearme.fragments;
 
 
 import android.os.Bundle;
-import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
 import android.support.v4.app.Fragment;
 
-import com.truongpq.placesnearme.R;
+import com.placesnearme.R;
 
 /**
  * A simple {@link Fragment} subclass.

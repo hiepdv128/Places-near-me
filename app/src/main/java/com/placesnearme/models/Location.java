@@ -1,4 +1,4 @@
-package com.truongpq.placesnearme.models;
+package com.placesnearme.models;
 
 /**
  * Created by TruongPQ on 4/9/16.

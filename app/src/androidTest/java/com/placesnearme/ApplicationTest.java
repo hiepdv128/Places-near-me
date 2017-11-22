@@ -1,4 +1,4 @@
-package com.truongpq.placesnearme;
+package com.placesnearme;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

@@ -1,4 +1,4 @@
-package com.truongpq.placesnearme;
+package com.placesnearme;
 
 import android.Manifest;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Handler;
-import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -54,14 +53,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.truongpq.placesnearme.adapters.PlaceTypesAdapter;
-import com.truongpq.placesnearme.adapters.PlacesAdapter;
-import com.truongpq.placesnearme.adapters.SegmentsAdapter;
-import com.truongpq.placesnearme.models.ItemClickSupport;
-import com.truongpq.placesnearme.models.Place;
-import com.truongpq.placesnearme.models.PlaceType;
-import com.truongpq.placesnearme.models.PlacesRespose;
-import com.truongpq.placesnearme.networks.PlacesApiHelper;
+import com.placesnearme.adapters.PlaceTypesAdapter;
+import com.placesnearme.adapters.PlacesAdapter;
+import com.placesnearme.adapters.SegmentsAdapter;
+import com.placesnearme.models.ItemClickSupport;
+import com.placesnearme.models.Place;
+import com.placesnearme.models.PlaceType;
+import com.placesnearme.models.PlacesRespose;
+import com.placesnearme.networks.PlacesApiHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -475,7 +474,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         mMap.clear();
                         Place place = responsePlaces.get(position);
-                        com.truongpq.placesnearme.models.Location location = place.getGeometry().getLocation();
+                        com.placesnearme.models.Location location = place.getGeometry().getLocation();
                         LatLng latLng = new LatLng(location.getLat(), location.getLng());
                         direction(latLng);
                         mMap.addMarker(new MarkerOptions().position(latLng).title(place.getName()).snippet(place.getVicinity()).icon(BitmapDescriptorFactory.fromResource(currentMakerId)));
@@ -488,7 +487,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 mMap.clear();
                 for (Place place : responsePlaces) {
-                    com.truongpq.placesnearme.models.Location location = place.getGeometry().getLocation();
+                    com.placesnearme.models.Location location = place.getGeometry().getLocation();
                     LatLng latLng = new LatLng(location.getLat(), location.getLng());
                     mMap.addMarker(new MarkerOptions().position(latLng).title(place.getName()).snippet(place.getVicinity()).icon(BitmapDescriptorFactory.fromResource(currentMakerId)));
                 }

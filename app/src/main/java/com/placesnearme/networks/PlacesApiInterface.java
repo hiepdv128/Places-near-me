@@ -1,10 +1,9 @@
-package com.truongpq.placesnearme.networks;
+package com.placesnearme.networks;
 
-import com.truongpq.placesnearme.models.PlacesRespose;
+import com.placesnearme.models.PlacesRespose;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.Query;
 
 /**

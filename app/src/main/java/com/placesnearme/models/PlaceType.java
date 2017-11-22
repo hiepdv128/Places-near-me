@@ -1,6 +1,6 @@
-package com.truongpq.placesnearme.models;
+package com.placesnearme.models;
 
-import com.truongpq.placesnearme.R;
+import com.placesnearme.R;
 
 import java.util.ArrayList;
 import java.util.List;

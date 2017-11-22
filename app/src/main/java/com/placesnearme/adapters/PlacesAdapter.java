@@ -1,8 +1,7 @@
-package com.truongpq.placesnearme.adapters;
+package com.placesnearme.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.truongpq.placesnearme.R;
-import com.truongpq.placesnearme.models.Place;
+import com.placesnearme.R;
+import com.placesnearme.models.Place;
 
 import java.util.List;
 

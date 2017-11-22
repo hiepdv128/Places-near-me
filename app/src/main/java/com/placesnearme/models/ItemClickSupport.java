@@ -1,9 +1,9 @@
-package com.truongpq.placesnearme.models;
+package com.placesnearme.models;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.truongpq.placesnearme.R;
+import com.placesnearme.R;
 
 /**
  * Created by TruongPQ on 4/20/16.

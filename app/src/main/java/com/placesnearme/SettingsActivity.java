@@ -1,9 +1,9 @@
-package com.truongpq.placesnearme;
+package com.placesnearme;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-import com.truongpq.placesnearme.fragments.SettingFragment;
+import com.placesnearme.fragments.SettingFragment;
 
 public class SettingsActivity extends PreferenceActivity {
     @Override

@@ -1,10 +1,10 @@
-package com.truongpq.placesnearme.networks;
+package com.placesnearme.networks;
 
 import android.content.Context;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.truongpq.placesnearme.R;
-import com.truongpq.placesnearme.models.PlacesRespose;
+import com.placesnearme.R;
+import com.placesnearme.models.PlacesRespose;
 
 import retrofit2.Call;
 import retrofit2.Callback;
